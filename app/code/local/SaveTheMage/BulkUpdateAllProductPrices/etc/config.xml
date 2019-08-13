@@ -3,7 +3,7 @@
 <config>
     <modules>
         <SaveTheMage_BulkUpdateAllProductPrices>
-            <version>1.1.1</version>
+            <version>1.1.2</version>
         </SaveTheMage_BulkUpdateAllProductPrices>
     </modules> 
 
@@ -18,6 +18,13 @@
                 <class>SaveTheMage_BulkUpdateAllProductPrices_Helper</class>
             </BulkUpdateAllProductPricesHelper1>
         </helpers>  
+        <models>
+                <!-- ... -->
+                <savethemagebulkupdateallproductprices>
+                    <class>SaveTheMage_BulkUpdateAllProductPrices_Model</class>
+                </savethemagebulkupdateallproductprices>   
+                <!-- ... -->
+            </models>	
 	</global>    
 
 	<admin>
@@ -28,7 +35,7 @@
                     <module>SaveTheMage_BulkUpdateAllProductPrices_AdminControllersHere</module>
                     <frontName>BulkUpdateAllProductPrices</frontName>                   
                     <modules>
-		    <sintax after="SaveTheMage_BulkUpdateAllProductPrices_AdminControllersHere">Mage_Adminhtml</sintax>
+		    <BulkUpdateAllProductPrices after="SaveTheMage_BulkUpdateAllProductPrices_AdminControllersHere">Mage_Adminhtml</BulkUpdateAllProductPrices>
 		    </modules>
                 </args>
 		   </BulkUpdateAllProductPrices>		     

@@ -68,16 +68,16 @@
     </table>
 </div>
 <div class="entry-edit">
-    <form id="edit_form" name="edit_form" method="post" action="<?=$this->getUrl('*/*/post')?>">
+    <form id="edit_form" name="edit_form" method="post" action="<?php echo $this->getUrl('*/*/post') ?>">
         <input name="form_key" type="hidden" value="<?php echo Mage::getSingleton('core/session')->getFormKey() ?>" />
-        <h4 class="fieldset-legend"><?=$this->__('Bulk Adjust All Product Prices')?></h4>
+        <h4 class="fieldset-legend"><?php echo $this->__('Bulk Adjust All Product Prices')?></h4>
         
         <strong id="message" class="label" style="color: #EA7601">You are about to ADD in all Product Prices in All Stores</strong>
         
         <fieldset id="my-fieldset1">
             <table cellspacing="0" class="form-list" style='border: 1px solid'>
                 <tr>
-                    <td class="label"><?=$this->__('Choose Store:')?> <span class="required">*</span></td>
+                    <td class="label"><?php echo $this->__('Choose Store:')?> <span class="required">*</span></td>
                     <td class="input-ele">
                         
                         <?php 
@@ -114,7 +114,7 @@
                                         ?>	
 						<?php if (count($_allStores) > 0): ?>
 							<select class="required-entry" name="storeId" id="storeId">
-								<option value="0"> All Stores </option>
+								<option value="-1"> All Stores </option>
 								<?php foreach($_allStores as $_eachStoreId): ?>
 									<option value="<?php echo Mage::app()->getStore($_eachStoreId)->getId() ?>">
 										<?php echo Mage::app()->getStore($_eachStoreId)->getName() ?>
@@ -133,7 +133,7 @@
         <fieldset id="my-fieldset2">
             <table cellspacing="0" class="form-list" style='border: 1px solid'>
 		<tr>
-                    <td class="label"><?=$this->__('Add Or Subtract:')?> <span class="required">*</span></td>
+                    <td class="label"><?php echo $this->__('Add Or Subtract:')?> <span class="required">*</span></td>
                     <td class="input-ele">
                         <select id="AddOrSubtract" name="AddOrSubtract" class="required-entry">
                             <option value="ADD" selected>Add&nbsp;&nbsp;</option>
@@ -147,7 +147,7 @@
         <fieldset id="my-fieldset3">
             <table cellspacing="0" class="form-list" style='border: 1px solid'>
 		<tr>
-                    <td class="label"><?=$this->__('Percent or Flat:')?> <span class="required">*</span></td>
+                    <td class="label"><?php echo $this->__('Percent or Flat:')?> <span class="required">*</span></td>
                     <td class="input-ele">
                         <select id="PercentOrFlat" name="PercentOrFlat" class="required-entry">
                             <option value="Flat" selected>Flat&nbsp;&nbsp;</option>
@@ -163,7 +163,7 @@
 		<tr>
                     <td class="label">
                         <div>    
-                      <?=$this->__('Price Adjustment Value:')?></div>  
+                      <?php echo $this->__('Price Adjustment Value:')?></div>  
                       <div>
                           <p>( This will be the number as a flat values or percentage that will be used to adjust all product pricing in the 
                           store. )</p>
@@ -172,7 +172,7 @@
                     <td class="input-ele"><input type='number' class="input-text <!--required-entry-->" name="PriceAdjustmentValue" id='PriceAdjustmentValue'/></td>
 		</tr>
 		<tr>
-                    <td class="label"><?=$this->__('Special Price Adjustment Value:')?></td>
+                    <td class="label"><?php echo $this->__('Special Price Adjustment Value:')?></td>
                     <td class="input-ele"><input type='number' class="input-text" name="SpecialPriceAdjustmentValue" id="SpecialPriceAdjustmentValue"/></td>
 		</tr>
             </table>

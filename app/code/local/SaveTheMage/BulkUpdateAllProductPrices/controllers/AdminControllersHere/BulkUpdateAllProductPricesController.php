@@ -27,159 +27,43 @@ class SaveTheMage_BulkUpdateAllProductPrices_AdminControllersHere_BulkUpdateAllP
                         $PriceAdjustmentValue = $post->getParam('PriceAdjustmentValue'); //Done
                         $SpecialPriceAdjustmentValue = $post->getParam('SpecialPriceAdjustmentValue'); //Done
                         
-                        
-                        $prefix = Mage::getConfig()->getTablePrefix();
-                        
-                        $msg = "";
-                                
-                        //Check if price need to update or not
-			if( !empty( $PriceAdjustmentValue ) )
+                        if( $PriceAdjustmentValue == 0 && $SpecialPriceAdjustmentValue == 0 )
                         {
-			$sqlPrice = "";                        
-                        $sqlWhere = "val.attribute_id = (
-					 SELECT attribute_id FROM " . $prefix . "eav_attribute eav
-					 WHERE eav.entity_type_id in ( 4 , 10 )
-					   AND eav.attribute_code = 'price'
-					)";
-                        
-			if( $storeId > -1 )  // For particular store
-			{
-                            $sqlWhere = $sqlWhere . " AND val.store_id = $storeId";
-                            
-			}
-			
-                        $sqlPrice = "UPDATE " . $prefix ."catalog_product_entity_decimal val";
-                        switch( $PercentOrFlat )
-                        {
-                            case "Percent":
-                        
-                                $PriceAdjustmentValue = ( $PriceAdjustmentValue ) / 100 ;
-
-                                if($AddOrSubtract == "ADD")    
-                                {
-                                    $sqlPrice .= " SET  val.value = ( val.value + ( val.value *  $PriceAdjustmentValue ) )";
-                                }
-                                else if($AddOrSubtract = "SUBTRACT")
-                                {
-                                    $sqlPrice .= " SET  val.value = ( val.value - ( val.value *  $PriceAdjustmentValue ) )";
-                                }
-                                else
-                                {
-                                    Mage::throwException($this->__('Invalid Operation.'));
-                                }
-                                break;
-                        
-                            case "Flat":
-                                
-                                if($AddOrSubtract == "ADD")    
-                                {
-                                    $sqlPrice .= " SET  val.value = ( val.value + $PriceAdjustmentValue )";
-                                }
-                                else if($AddOrSubtract = "SUBTRACT")
-                                {
-                                    $sqlPrice .= " SET  val.value = ( val.value - $PriceAdjustmentValue )";
-                                }
-                                else
-                                {
-                                    Mage::throwException($this->__('Invalid Operation.'));
-                                }
-                                break;
-                                
-                            default:
-                                Mage::throwException($this->__('Invalid Percent or Flat value.'));
+                             Mage::getSingleton('adminhtml/session')->addError("Price or Special price is required.");
                         }
-                        
-                        $sqlPrice = $sqlPrice . " WHERE " . $sqlWhere;
-                        
-			//Run the query here
-                        $write = Mage::getSingleton('core/resource')->getConnection('core_write');
-			$write->query( $sqlPrice );
-			
-			$msg = "Price updated for all products successfully.";
+                        else if( $PercentOrFlat != 'Percent' && $PercentOrFlat !="Flat" ){
+                            Mage::getSingleton('adminhtml/session')->addError("Percent or Flat is required.");
                         }
-                        
-			//Check if special price need to update or not
-			if( !empty( $SpecialPriceAdjustmentValue ) )
-			{
+                        else if( $AddOrSubtract !='ADD' && $AddOrSubtract !='SUBTRACT' ){
+                            Mage::getSingleton('adminhtml/session')->addError("Add or Subtract is required.");
+                        }
+                        else{
                             
-                            $sqlSpecialWhere = "val.attribute_id = (
-					 SELECT attribute_id FROM " . $prefix . "eav_attribute eav
-					 WHERE eav.entity_type_id in ( 4 , 10 )
-					   AND eav.attribute_code = 'special_price'
-					)";
-                            
-                            if( $storeId > -1 )  // For particular store
+                            $model = Mage::getModel('savethemagebulkupdateallproductprices/Worker');
+                            if( empty( $model ) )
                             {
-                                $sqlSpecialWhere = $sqlSpecialWhere . " AND val.store_id = $storeId";
-                            
+                                require_once ( Mage::getBaseDir('app') . '/code/local/SaveTheMage/BulkUpdateAllProductPrices/Model/Worker.php');
+                                $model = new SaveTheMage_BulkUpdateAllProductPrices_Model_Worker();
                             }
-			
-                            $sqlSpecialPrice = "UPDATE " . $prefix ."catalog_product_entity_decimal val";
-                        switch( $PercentOrFlat )
-                        {
-                            case "Percent":
-                        
-                                $SpecialPriceAdjustmentValue = ( $SpecialPriceAdjustmentValue ) / 100 ;
-
-                                if($AddOrSubtract == "ADD")    
-                                {
-                                    $sqlSpecialPrice .= " SET  val.value = ( val.value + ( val.value *  $SpecialPriceAdjustmentValue ) )";
-                                }
-                                else if($AddOrSubtract = "SUBTRACT")
-                                {
-                                    $sqlSpecialPrice .= " SET  val.value = ( val.value - ( val.value *  $SpecialPriceAdjustmentValue ) )";
-                                }
-                                else
-                                {
-                                    Mage::throwException($this->__('Invalid Operation.'));
-                                }
-                                break;
-                        
-                            case "Flat":
+                            if( !empty( $model ) ){
                                 
-                                if($AddOrSubtract == "ADD")    
-                                {
-                                    $sqlSpecialPrice .= " SET  val.value = ( val.value + $SpecialPriceAdjustmentValue )";
-                                }
-                                else if($AddOrSubtract = "SUBTRACT")
-                                {
-                                    $sqlSpecialPrice .= " SET  val.value = ( val.value - $SpecialPriceAdjustmentValue ) ";
-                                }
-                                else
-                                {
-                                    Mage::throwException($this->__('Invalid Operation.'));
-                                }
-                                break;
+                                //UpdatePrice($storeId, $priceToUpdate, $specialPriceToUpdate, $addOrSubtract, $percentOrFlat)
+                                $model->UpdatePrice($storeId, $PriceAdjustmentValue, $SpecialPriceAdjustmentValue, $AddOrSubtract, $PercentOrFlat);
                                 
-                            default:
-                                Mage::throwException($this->__('Invalid Percent or Flat value.'));
+                                $msg = "Price or Special Price Updated successfully";
+                                $message = $this->__( $msg );
+                                Mage::getSingleton('adminhtml/session')->addSuccess($message);
+                            }
+                            else{
+                                Mage::getSingleton('adminhtml/session')->addError("Can't perform the operation right now, please contact with support@savethemage.com.");
+                            }
                         }
                         
-                        $sqlSpecialPrice = $sqlSpecialPrice . " WHERE " . $sqlSpecialWhere;
                         
-			//Run the query here
-                        $write = Mage::getSingleton('core/resource')->getConnection('core_write');
-			$write->query( $sqlSpecialPrice );
-
-                            if(!empty( $msg ))
-                                $msg = "Special Price and " . $msg;
-                            else
-                                $msg = "Special Price for all products updated successfully.";
-			}
-                        
-            if( !empty( $msg ) )
-            {
-            $message = $this->__( $msg );
-            Mage::getSingleton('adminhtml/session')->addSuccess($message);
-            }
-            else
-            {
-                Mage::getSingleton('adminhtml/session')->addError("Price or Special price is required.");
-            }
-			
         } catch (Exception $e) {
             Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
         }
-        $this->_redirect('*/*');
+            $this->_redirect('*/*');
 	}
+        
 }
