@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<package>
+    <name>Bulk_Update_All_Product_Prices</name>
+    <version>1.1.2</version>
+    <stability>stable</stability>
+    <license>(GPL)</license>
+    <channel>community</channel>
+    <extends/>
+    <summary>Bulk update all of the products in your store with one action, adding or subtracting values.</summary>
+    <description>This extension allows you to bulk update every product price in your store. You can also bulk change the special price.&#xD;
+&#xD;
+Changes can be made per store view. &#xD;
+&#xD;
+You can ADD a flat value or percentage to all products prices.&#xD;
+&#xD;
+You can also SUBTRACT a flat value or percentage from all product prices.</description>
+    <notes>This module has been tested on 1.6.0.0 - 1.7.0.2</notes>
+    <authors><author><name>David Buell</name><user>SaveTheMage</user><email>support@savethemage.com</email></author></authors>
+    <date>2013-05-10</date>
+    <time>18:41:08</time>
+    <contents><target name="magelocal"><dir name="SaveTheMage"><dir name="BulkUpdateAllProductPrices"><dir name="Block"><file name="BlockForFormBulkUpdateAllProductPrices.php" hash="d0c50d3220e883b24d6853f3166d5889"/><file name="ShowTabsAdminBlock.php" hash="3a239e073360ad05262bd3803df9a512"/></dir><dir name="Helper"><file name="Data.php" hash="9c5adce1896448a6302cc7275be25953"/></dir><dir name="controllers"><dir name="AdminControllersHere"><file name="BulkUpdateAllProductPricesController.php" hash="eab272eb8f441dc4caa6a18ef7a04383"/></dir></dir><dir name="etc"><file name="config.xml" hash="30f0adea0e281d640d2598617912f101"/></dir></dir></dir></target><target name="magedesign"><dir name="adminhtml"><dir name="default"><dir name="default"><dir name="template"><dir name="SaveTheMage"><file name="tab_container_FormBulkUpdateAllProductPrices.phtml" hash="5f787ee38b46ab5b504f5f257f3779f8"/></dir></dir></dir></dir></dir></target><target name="mageetc"><dir name="modules"><file name="SaveTheMage_BulkUpdateAllProductPrices.xml" hash="1edafa25e3f8f9643300103599becbea"/></dir></target></contents>
+    <compatible/>
+    <dependencies><required><php><min>5.1.0</min><max>6.0.0</max></php></required></dependencies>
+</package>

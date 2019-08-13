@@ -1,0 +1,211 @@
+<!-- Jquery UI -->
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
+<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+<!-- Jquery UI -->
+
+<script type="text/javascript">
+// <![CDATA[
+
+   var $j = jQuery.noConflict();
+   
+   $j(document).ready(function(){
+       
+       var msg = "";
+       
+       function putTxt()
+       {
+           var store = $j("#storeId option:selected").text();
+            var val = $j('#PriceAdjustmentValue').val();
+            var pf = $j('#PercentOrFlat option:selected').val();
+            var op = $j('#AddOrSubtract option:selected').val();
+                
+            if( val.length >0 )
+            {
+                if(pf ==='Percent')
+                    msg = "You are about to " + op +" "+val+"% to all Product Prices in "+store ;
+                else
+                    msg = "You are about to " + op +" $"+val+" to all Product Prices in "+store;
+            }
+            else
+            {
+             
+                var sval = $j('#SpecialPriceAdjustmentValue').val();
+                if(sval.length > 0)
+                {
+                    if(pf ==='Percent')
+                        msg = "You are about to " + op +" "+sval+"% to all Product Special Prices in "+store ;
+                    else
+                        msg = "You are about to " + op +" $"+sval+" to all Product Special Prices in "+store;
+                }
+                else //if( val.length === 0 )
+                    msg = "You are about to " + op +" in all Product Prices in "+store;
+             
+             }
+            
+                
+           $j('#message').text(msg);
+           
+       }
+        $j('#storeId').change(function(){ putTxt(); });
+        $j('#AddOrSubtract').change(function(){ putTxt(); });
+        $j('#PercentOrFlat').change(function(){ putTxt(); });
+        $j('#PriceAdjustmentValue').bind('input', function(){ putTxt(); });
+        $j('#SpecialPriceAdjustmentValue').bind('input', function(){ putTxt(); });
+   });
+//]]>
+</script>
+
+
+<div class="content-header main-col-inner">
+    <table cellspacing="0" class="grid-header">
+        <tr>
+            <td><h3 id="">Price Settings and update</h3></td>
+            <td class="a-right">
+                <button onclick="javascript:ShowConfirmationAndSubmit()" class="scalable save" type="button"><span>Update</span></button>
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="entry-edit">
+    <form id="edit_form" name="edit_form" method="post" action="<?=$this->getUrl('*/*/post')?>">
+        <input name="form_key" type="hidden" value="<?php echo Mage::getSingleton('core/session')->getFormKey() ?>" />
+        <h4 class="fieldset-legend"><?=$this->__('Bulk Adjust All Product Prices')?></h4>
+        
+        <strong id="message" class="label" style="color: #EA7601">You are about to ADD in all Product Prices in All Stores</strong>
+        
+        <fieldset id="my-fieldset1">
+            <table cellspacing="0" class="form-list" style='border: 1px solid'>
+                <tr>
+                    <td class="label"><?=$this->__('Choose Store:')?> <span class="required">*</span></td>
+                    <td class="input-ele">
+                        
+                        <?php 
+                $websites = Mage::app()->getWebsites();
+                if (count($websites) > 0 ) { ?>
+                        <select class="required-entry" name="storeId" id="storeId">
+                            <option value="-1" selected>All Stores</option>
+                        <?php //endif; ?>
+                            <?php foreach ($websites as $website): ?>
+                                <?php $showWebsite = false; ?>
+                                <?php foreach ($website->getGroups() as $group): ?>
+                                    <?php $showGroup = false; ?>
+                                    <?php foreach (Mage::app()->getStores($group) as $store): ?>
+                                        <?php if ($showWebsite == false): ?>
+                                            <?php $showWebsite = true; ?>
+                                            <optgroup label="<?php echo $this->escapeHtml($website->getName()) ?>"></optgroup>
+                                        <?php endif; ?>
+                                        <?php if ($showGroup == false): ?>
+                                            <?php $showGroup = true; ?>
+                                            <optgroup label="&nbsp;&nbsp;&nbsp;<?php echo $this->escapeHtml($group->getName()) ?>">
+                                        <?php endif; ?>
+                                        <option value="<?php echo $this->escapeHtml($store->getId()) ?>">&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $this->escapeHtml($store->getName()) ?></option>
+                                    <?php endforeach; ?>
+                                    <?php if ($showGroup): ?>
+                                        </optgroup>
+                                    <?php endif; ?>
+                                <?php endforeach; ?>
+                            <?php endforeach; ?>
+                        </select>
+                        
+                <?php } else { ?>
+                        <?php
+					$_allStores = Mage::app()->getStores();
+                                        ?>	
+						<?php if (count($_allStores) > 0): ?>
+							<select class="required-entry" name="storeId" id="storeId">
+								<option value="0"> All Stores </option>
+								<?php foreach($_allStores as $_eachStoreId): ?>
+									<option value="<?php echo Mage::app()->getStore($_eachStoreId)->getId() ?>">
+										<?php echo Mage::app()->getStore($_eachStoreId)->getName() ?>
+									</option>
+								<?php endforeach; ?>
+							</select>
+						<?php endif; ?>
+                <?php } ?>
+                        <a class="link-store-scope" title="What is this?" onclick="this.target='_blank'" href="http://www.magentocommerce.com/knowledge-base/entry/understanding-store-scopes">What is this?</a>
+                    </td>
+                    </tr>
+                    
+                    </table>
+            </fieldset>
+        
+        <fieldset id="my-fieldset2">
+            <table cellspacing="0" class="form-list" style='border: 1px solid'>
+		<tr>
+                    <td class="label"><?=$this->__('Add Or Subtract:')?> <span class="required">*</span></td>
+                    <td class="input-ele">
+                        <select id="AddOrSubtract" name="AddOrSubtract" class="required-entry">
+                            <option value="ADD" selected>Add&nbsp;&nbsp;</option>
+                            <option value="SUBTRACT">Subtract&nbsp;&nbsp;</option>
+                        </select>
+                    </td>
+		</tr>
+            </table>
+        </fieldset>
+        
+        <fieldset id="my-fieldset3">
+            <table cellspacing="0" class="form-list" style='border: 1px solid'>
+		<tr>
+                    <td class="label"><?=$this->__('Percent or Flat:')?> <span class="required">*</span></td>
+                    <td class="input-ele">
+                        <select id="PercentOrFlat" name="PercentOrFlat" class="required-entry">
+                            <option value="Flat" selected>Flat&nbsp;&nbsp;</option>
+                            <option value="Percent">Percent&nbsp;&nbsp;</option>
+                        </select>
+                    </td>
+		</tr>
+            </table>
+        </fieldset>
+        
+        <fieldset id="my-fieldset4">
+            <table cellspacing="0" class="form-list" style='border: 1px solid'>
+		<tr>
+                    <td class="label">
+                        <div>    
+                      <?=$this->__('Price Adjustment Value:')?></div>  
+                      <div>
+                          <p>( This will be the number as a flat values or percentage that will be used to adjust all product pricing in the 
+                          store. )</p>
+                      </div>
+                    </td>
+                    <td class="input-ele"><input type='number' class="input-text <!--required-entry-->" name="PriceAdjustmentValue" id='PriceAdjustmentValue'/></td>
+		</tr>
+		<tr>
+                    <td class="label"><?=$this->__('Special Price Adjustment Value:')?></td>
+                    <td class="input-ele"><input type='number' class="input-text" name="SpecialPriceAdjustmentValue" id="SpecialPriceAdjustmentValue"/></td>
+		</tr>
+            </table>
+        </fieldset>
+    </form>
+</div>
+
+<div id="dialog-confirm" title="Bulk Update All Product Prices?" style='display: none;'>
+<p id='confmsg'><span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span></p>
+</div>
+<script type="text/javascript">
+    var editForm = new varienForm('edit_form');
+    
+    function ShowConfirmationAndSubmit()
+    {
+        $j('#confmsg').text( $j('#message').text() + ". Are you sure? " );
+        
+         $j( "#dialog-confirm" ).dialog({
+            resizable: false,
+            height:180,
+            modal: true,
+            buttons: {
+            "Confirm": function() {
+                editForm.submit();
+                $j( this ).dialog( "close" );
+            },
+            Cancel: function() {
+                //
+                $j( this ).dialog( "close" );
+            }
+            }
+            });
+            
+        
+    }
+</script>

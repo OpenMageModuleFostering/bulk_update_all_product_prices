@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+
+<config>
+    <modules>
+        <SaveTheMage_BulkUpdateAllProductPrices>
+            <version>1.1.1</version>
+        </SaveTheMage_BulkUpdateAllProductPrices>
+    </modules> 
+
+    <global>
+        <blocks>
+            <BulkUpdateAllProductPricesBlock1>
+            	<class>SaveTheMage_BulkUpdateAllProductPrices_Block</class>
+           </BulkUpdateAllProductPricesBlock1>  
+        </blocks>
+        <helpers>
+            <BulkUpdateAllProductPricesHelper1>
+                <class>SaveTheMage_BulkUpdateAllProductPrices_Helper</class>
+            </BulkUpdateAllProductPricesHelper1>
+        </helpers>  
+	</global>    
+
+	<admin>
+		<routers>
+		   <BulkUpdateAllProductPrices>
+                <use>admin</use>
+                <args>
+                    <module>SaveTheMage_BulkUpdateAllProductPrices_AdminControllersHere</module>
+                    <frontName>BulkUpdateAllProductPrices</frontName>                   
+                    <modules>
+		    <sintax after="SaveTheMage_BulkUpdateAllProductPrices_AdminControllersHere">Mage_Adminhtml</sintax>
+		    </modules>
+                </args>
+		   </BulkUpdateAllProductPrices>		     
+	     </routers>    	
+	</admin>
+	
+    <adminhtml>
+        <menu>
+             <SaveTheMageMenu translate="title" module="BulkUpdateAllProductPricesHelper1">
+                <title>SaveTheMage</title>
+                <sort_order>201</sort_order>
+                <children>
+                    <BulkUpdateAllProductPricesChildItem1 translate="title" module="BulkUpdateAllProductPricesHelper1">
+                        <title>Bulk Update All Product Prices</title>
+                        <action>BulkUpdateAllProductPrices/BulkUpdateAllProductPrices</action>
+                        <sort_order>1</sort_order>                        
+                    </BulkUpdateAllProductPricesChildItem1>
+	       </children>
+             </SaveTheMageMenu>
+        </menu>
+	</adminhtml>    
+    
+</config>
