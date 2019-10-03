@@ -1,16 +1,19 @@
 {
-    "name": "OpenMageModuleFostering/Bulk_Update_All_Product_Prices",
+    "name": "OpenMageModuleFostering\/Bulk_Update_All_Product_Prices",
     "type": "magento-module",
     "license": "(GPL)",
     "homepage": "",
     "description": "Bulk update all of the products in your store with one action, adding or subtracting values.",
     "authors": [
-    {
-        "name": "SaveTheMage",
-        "email": "support@savethemage.com"
-    }
-],
+        {
+            "name": "SaveTheMage",
+            "email": "support@savethemage.com"
+        }
+    ],
     "suggest": {
-        "magento-hackathon/magento-composer-installer": "*"
-    }
+        "magento-hackathon\/magento-composer-installer": "*"
+    },
+    "keywords": [
+        "openmage-module"
+    ]
 }
