@@ -1,5 +1,5 @@
 {
-    "name": "OpenMageModuleFostering\/Bulk_Update_All_Product_Prices",
+    "name": "openmage-module-fostering\/bulk_update_all_product_prices",
     "type": "magento-module",
     "license": "(GPL)",
     "homepage": "",
